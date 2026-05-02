@@ -1,5 +1,4 @@
-# Compiled firmware binaries
-*.bin
+# No global ignores for .bin – firmware binaries are committed explicitly
 
 # OS files
 .DS_Store

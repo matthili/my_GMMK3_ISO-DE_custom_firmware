@@ -20,7 +20,7 @@
  */
 #undef WEAR_LEVELING_BACKING_SIZE
 #define WEAR_LEVELING_BACKING_SIZE 8192
-#define DYNAMIC_KEYMAP_LAYER_COUNT 2
+#define DYNAMIC_KEYMAP_LAYER_COUNT 4
 
 /* ─── Encoder Configuration ───────────────────────────────────────────
  * The rotary encoder resolution controls sensitivity.

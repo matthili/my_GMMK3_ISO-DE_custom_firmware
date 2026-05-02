@@ -1,5 +1,7 @@
 # Firmware Binaries
 
-Hier werden die kompilierten `.bin`-Dateien abgelegt.
+| Modell | Datei | Größe |
+|---|---|---|
+| GMMK3 P100 ISO | `gmmk_gmmk3_p100_iso_iso_de_custom.bin` | ~51 KB |
 
-Aktuell muss die Firmware selbst kompiliert werden – siehe [README.md](../README.md#-selbst-kompilieren).
+Siehe [README.md](../README.md) für Flash-Anleitung.
