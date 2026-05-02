@@ -54,7 +54,7 @@ Viele Schalter prellen bis zu 20 ms und verursachen dabei Doppeleingaben. Der QM
 ### 🎛️ VIA-Unterstützung
 - VIA-Support ist aktiviert (`VIA_ENABLE = yes`)
 - Tastenänderungen können jederzeit per Browser über **[usevia.app](https://usevia.app)** vorgenommen werden, ohne neu zu kompilieren
-- 2 Keymap-Layer sind im EEPROM gespeichert
+- 4 Keymap-Layer sind im EEPROM gespeichert (Win-Base, Win-FN, Mac-Base, Mac-FN)
 
 ### 🔊 Drehregler (Rotary Encoder)
 - **Drehen:** Lautstärke hoch / runter
@@ -200,26 +200,79 @@ Legende: — = transparent (Taste aus Layer 0 wird verwendet)
 
 Die Keymap-Quelldateien liegen im Ordner [`keymap_p100/`](keymap_p100/).
 
-Als Basis-Repository wird der Fork von Lud00 benötigt, da nur dieser die Keyboard-Definition für die GMMK3 P100 enthält:
+> ⚠️ **Wichtiger Hinweis:** Der Fork von Lud00 (der die GMMK3 P100 Board-Definition enthält) ist **nicht direkt kompilierbar** – er enthält mehrere Fehler/fehlende Dateien. Die folgende Anleitung beschreibt den tatsächlich funktionierenden Weg.
 
-👉 **[Lud00/gmmk – Branch: gmmk3_p100_ansi_iso_wired](https://github.com/Lud00/gmmk/tree/gmmk3_p100_ansi_iso_wired/keyboards/gmmk/gmmk3/p100)**
+### Schritt 1: QMK-Basis (GloriousThrall-Fork) klonen
 
-**Kurzanleitung:**
+Dieser Fork wird als Basis verwendet, weil die Toolchain und alle Abhängigkeiten hier korrekt konfiguriert sind:
 
 ```bash
-# 1. Repository klonen (den richtigen Branch!)
-git clone -b gmmk3_p100_ansi_iso_wired https://github.com/Lud00/gmmk.git qmk_firmware
+git clone https://github.com/GloriousThrall/qmk_firmware.git
 cd qmk_firmware
-git submodule update --init --recursive lib/lufa
+qmk setup --yes
+```
 
-# 2. Keymap-Ordner kopieren
+### Schritt 2: GMMK3 P100 Board-Definition hinzufügen
+
+Der GloriousThrall-Fork enthält keine GMMK3-Definition. Diese muss aus dem Lud00-Fork übernommen werden – **mit folgenden Korrekturen**:
+
+```bash
+mkdir -p keyboards/gmmk/gmmk3/p100/iso/keymaps/default
+```
+
+Folgende Dateien aus dem [Lud00-Repository](https://github.com/Lud00/gmmk/tree/gmmk3_p100_ansi_iso_wired/keyboards/gmmk/gmmk3/p100) kopieren/erstellen:
+
+| Datei | Quelle |
+|---|---|
+| `keyboards/gmmk/gmmk3/p100/config.h` | Lud00-Repo (unverändert) |
+| `keyboards/gmmk/gmmk3/p100/info.json` | Lud00-Repo (unverändert) |
+| `keyboards/gmmk/gmmk3/p100/iso/info.json` | Lud00-Repo (unverändert) |
+| `keyboards/gmmk/gmmk3/p100/iso/rules.mk` | Lud00-Repo (unverändert) |
+| `keyboards/gmmk/gmmk3/p100/iso/iso.c` | Lud00-Repo **+ Korrekturen (siehe unten)** |
+| `keyboards/gmmk/gmmk3/p100/halconf.h` | Lud00-Repo (unverändert) |
+| `keyboards/gmmk/gmmk3/p100/mcuconf.h` | Lud00-Repo (unverändert) |
+
+#### Korrekturen in `iso.c` (zwingend erforderlich!)
+
+Die `iso.c` aus dem Lud00-Repo kompiliert **nicht ohne** diese Änderungen:
+
+**1. `#include QMK_KEYBOARD_H` ganz oben einfügen** (vor allen anderen Includes):
+```c
+// iso.c – ganz oben, nach dem Lizenzblock:
+#include QMK_KEYBOARD_H   // ← NEU: fehlt im Original, Typen sonst unbekannt
+#include "spi_master.h"
+```
+Ohne diesen Include sind `aw20216s_led_t` und `led_config_t` unbekannt → Compile-Fehler.
+
+**2. `#define __ NO_LED` an den Anfang verschieben** (war fälschlicherweise mitten in der Datei zwischen den Daten-Arrays):
+```c
+// Gleich nach den Includes:
+#define __ NO_LED
+```
+
+### Schritt 3: Keymap kopieren
+
+```bash
 cp -r /pfad/zu/keymap_p100 keyboards/gmmk/gmmk3/p100/iso/keymaps/iso_de_custom
+```
 
-# 3. Kompilieren
+### Schritt 4: Kompilieren
+
+```bash
 qmk compile -kb gmmk/gmmk3/p100/iso -km iso_de_custom
 ```
 
-Die kompilierte Firmware-Datei findet sich anschließend im QMK-Stammverzeichnis.
+> 💡 **Unter Windows** muss dies im **MSYS2 MinGW 64-bit Terminal** ausgeführt werden (nicht in der normalen PowerShell). QMK unter Windows wird über [QMK MSYS](https://msys.qmk.fm/) installiert.
+
+Die kompilierte `.bin`-Datei findet sich anschließend im QMK-Stammverzeichnis.
+
+### Bekannte Fehler & Lösungen
+
+| Fehlermeldung | Ursache | Lösung |
+|---|---|---|
+| `unknown type name 'aw20216s_led_t'` | Fehlender `#include QMK_KEYBOARD_H` in `iso.c` | Wie in Schritt 2 beschrieben einfügen |
+| `SPI driver activated but no SPI peripheral assigned` | Fehlende `halconf.h` / `mcuconf.h` | Aus Lud00-Repo kopieren (Schritt 2) |
+| `Number of keymap layers exceeds DYNAMIC_KEYMAP_LAYER_COUNT` | Standardwert ist 2, aber 4 Layer werden benötigt | In `config.h`: `#define DYNAMIC_KEYMAP_LAYER_COUNT 4` |
 
 ---
 
