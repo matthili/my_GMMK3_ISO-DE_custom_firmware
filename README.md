@@ -161,6 +161,28 @@ Legende: — = transparent (Taste aus Layer 0 wird verwendet)
 
 ---
 
+> 🔀 **Layer 2 & 3 werden über den DIP-Switch auf der Rückseite der Tastatur aktiviert.**
+
+### Layer 2 – Basis (QWERTZ DE/AT) – Mac OS
+
+Identisch mit Layer 0 (Windows), **außer** der untersten Tastenreihe:
+
+```
+├────┼─────┼──────┼──────────────────────────────────────┬──────┬────────┬──────┬──────┤ ┌───┼───┼───┐ ├───────┼───┤   │
+│Ctrl│ Opt │ Cmd  │                Space                  │ Cmd  │   FN   │ Opt  │ Ctrl │ │ ← │ ↓ │ → │ │   0   │ . │   │
+└────┴─────┴──────┴──────────────────────────────────────┴──────┴────────┴──────┴──────┘ └───┴───┴───┘ └───────┴───┴───┘
+```
+
+Statt `Win/Alt/RAlt` kommen die Mac-Modifier `Opt` (Option/Alt) und `Cmd` (Command/⌘) zum Einsatz.
+
+### Layer 3 – FN (gehalten) – Mac OS
+
+Identisch mit Layer 1 (Windows-FN), **außer**:
+- Kein `WnTog` (Windows-Taste sperren) – nicht relevant unter macOS
+- Alle anderen FN-Funktionen (Helligkeit, Farbe, Media-Tasten, Seiten-LEDs) sind identisch
+
+---
+
 ## 📋 FN-Tasten Kurzreferenz
 
 | FN + | Funktion |
