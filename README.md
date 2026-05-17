@@ -100,11 +100,37 @@ Die 20 Seiten-LEDs (je 10 links und rechts) leuchten immer in der aktuell gewäh
 
 > Die Reaktiv-Effekte sind *immer* aktiv – auch im Basisfarben-Modus „Aus" (Index 9).
 
+### 🔴🟢 Lock-Tasten Puls-Indikatoren
+
+Die Lock-Tasten signalisieren Zustandswechsel mit einer Puls-Animation (5× pulsierend über 3 Sekunden).
+
+> **Normalzustand:** Caps Lock = AUS, Num Lock = AN, Insert = AN (Einfüge-Modus)
+
+| Taste | Weg vom Normal (→ Rot) | Zurück zum Normal (→ Grün) | Danach |
+|---|---|---|---|
+| **Caps Lock** | AN → 5× rot pulsierend | AUS → 5× grün pulsierend | Abnormal: LED aus · Normal: Basisfarbe |
+| **Num Lock** | AUS → 5× rot pulsierend | AN → 5× grün pulsierend | Abnormal: LED aus · Normal: Basisfarbe |
+| **Insert** | AUS (Überschreiben) → 5× rot | AN (Einfügen) → 5× grün | Abnormal: LED aus · Normal: Basisfarbe |
+
+> Die Puls-Animation funktioniert auch bei ausgeschalteter Hintergrundbeleuchtung.
+> Das Pulsieren erfolgt zwischen Farbe und Schwarz.
+
+**Insert-Taste Langdruck:** Da der Insert-Zustand vom Betriebssystem nicht zurückgemeldet wird, trackt die Firmware den Zustand selbst (Standard: AN). Falls das Tracking aus dem Takt gerät, kann man die Insert-Taste **2 Sekunden lang gedrückt halten** um den Tracking-Wert auf „AN“ (Einfüge-Modus) zurückzusetzen. Ein langer Tastendruck sendet dabei kein Insert-Signal an den Computer.
+
+### 🔦 FN-Layer Beleuchtung
+
+Beim Gedrückthalten der FN-Taste werden nur die Tasten beleuchtet, die im FN-Layer eine Funktion haben:
+
+| Hintergrundbeleuchtung | Verhalten bei FN gedrückt |
+|---|---|
+| **AN** | Nur FN-belegte Tasten leuchten in der Basisfarbe, alle anderen aus |
+| **AUS** | FN-belegte Tasten leuchten grün, alle anderen bleiben aus |
+
+Beim Loslassen der FN-Taste kehrt die Beleuchtung sofort zum Normalzustand zurück.
+
 ### 🔢 Num Lock Indikator
 - Num Lock **AN** → Die Num-Lock-Taste leuchtet in der gewählten Basisfarbe
 - Num Lock **AUS** → Die Num-Lock-Taste ist dunkel
-
----
 
 ## 🔄 Original-Firmware wiederherstellen
 
