@@ -103,6 +103,9 @@ static uint32_t ins_press_time = 0;
 static bool     ins_key_held   = false;
 static uint8_t  ins_row = 0, ins_col = 0;
 
+/* FN-layer highlight: suppressed once a cursor key is pressed while FN held */
+static bool fn_highlight_active = true;
+
 /* Compute pulse brightness: triangle wave, 5 cycles in 3 seconds */
 static uint8_t calc_pulse_brightness(uint32_t elapsed) {
     if (elapsed >= PULSE_DURATION_MS) return 0;
@@ -210,6 +213,16 @@ bool dip_switch_update_user(uint8_t index, bool active) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
+ *  layer_state_set_user – reset FN highlight flag when FN layer activates
+ * ═══════════════════════════════════════════════════════════════════════ */
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (layer_state_cmp(state, WIN_FL) || layer_state_cmp(state, MACOS_FL)) {
+        fn_highlight_active = true;
+    }
+    return state;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
  *  process_record_user
  * ═══════════════════════════════════════════════════════════════════════ */
 #define MAX_EVENTS            16
@@ -242,16 +255,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         switch (keycode) {
             case RGB_BASE_NEXT:
+                fn_highlight_active = false;
                 base_color_idx = (base_color_idx + 1) % BASE_COLOR_COUNT;
                 user_config.color_idx = base_color_idx;
                 eeconfig_update_user(user_config.raw);
                 return false;
 
             case RGB_BASE_PREV:
+                fn_highlight_active = false;
                 base_color_idx = (base_color_idx == 0) ? (BASE_COLOR_COUNT - 1) : (base_color_idx - 1);
                 user_config.color_idx = base_color_idx;
                 eeconfig_update_user(user_config.raw);
                 return false;
+
+            case RM_VALU:
+            case RM_VALD:
+                fn_highlight_active = false;
+                break;
 
             case RGB_SIDE_TOG:
                 side_leds_on = !side_leds_on;
@@ -323,7 +343,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
     /* ── FN-layer highlighting ────────────────────────────────────── */
     bool fn_active = layer_state_is(WIN_FL) || layer_state_is(MACOS_FL);
-    if (fn_active) {
+    if (fn_active && fn_highlight_active) {
         uint8_t fn_layer = layer_state_is(MACOS_FL) ? MACOS_FL : WIN_FL;
         /* Turn off all LEDs first */
         for (uint8_t i = led_min; i < led_max; i++) {
