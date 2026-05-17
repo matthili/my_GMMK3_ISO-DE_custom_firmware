@@ -45,7 +45,7 @@
 ### 🔧 Key Chatter Fix (Debounce = 25 ms)
 Viele Schalter prellen bis zu 20 ms und verursachen dabei Doppeleingaben. Der QMK-Standard liegt bei nur 5 ms. Dieser Wert wurde auf **25 ms** erhöht, um auch stark prellende Schalter sicher abzufangen.
 
-### 🇦🇹/🇩🇪 Deutsches ISO-Layout (QWERTZ)
+### 🇦🇹 / 🇩🇪 Deutsches ISO-Layout (QWERTZ)
 - Vollständige QWERTZ-Tastenbelegung für AT/DE
 - Umlaute direkt auf den gewohnten Positionen: **Ö, Ä, Ü, ß**
 - Sonderzeichen korrekt: **^, <, #, +, ´**
