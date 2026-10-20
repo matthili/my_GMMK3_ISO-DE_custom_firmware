@@ -1,6 +1,6 @@
 # 🎹 GMMK3 P100 ISO-DE Custom QMK Firmware
 
-> **Eine persönliche Firmware-Adaption für die Glorious GMMK3 100% (P100) mit deutschem ISO-Layout.**
+> **Eine persönliche Firmware-Adaption für die Glorious GMMK3 100% (P100) sowie GMMK3 Pro 100% (P100) (wired, non-HE Models) mit deutschem ISO-Layout.**
 >
 > Portiert von der bewährten [GMMK2 ISO-DE Custom Firmware](https://github.com/matthili/my_GMMK2_ISO-DE_custom_firmware), angepasst an die Hardware der GMMK3 P100 – einschließlich Drehregler (Rotary Encoder) und Seitenbeleuchtung.
 
@@ -12,26 +12,33 @@
 
 | Modell | Download |
 |---|---|
-| **GMMK3 P100 ISO** | [`gmmk_gmmk3_p100_iso_iso_de_custom.bin`](firmware/gmmk_gmmk3_p100_iso_iso_de_custom.bin) |
+| **GMMK3 P100 / GMMK3 Pro P100 ISO** *(wired, non-HE)* | [`gmmk_gmmk3_p100_iso_iso_de_custom.bin`](firmware/gmmk_gmmk3_p100_iso_iso_de_custom.bin) |
 
-> ⚠️ **Achtung:** Nur für die **ISO**-Variante der GMMK3 P100. Für ANSI-Layouts ist diese Firmware nicht geeignet.
+> ℹ️ **Kompatibilität:** Diese Firmware funktioniert sowohl mit der **GMMK3 P100** als auch mit der **GMMK3 Pro P100** (jeweils kabelgebundene Modelle, wired, non-HE).
+>
+> ⚠️ **Achtung:** Nur für die **ISO**-Variante. Für ANSI-Layouts oder HE-Modelle (Hall Effect) ist diese Firmware nicht geeignet.
 
 ### Flashen mit QMK Toolbox
 
 1. **[QMK Toolbox herunterladen](https://github.com/qmk/qmk_toolbox/releases)** und starten
 2. Oben rechts die passende `.bin`-Datei laden (**Open** → Datei auswählen)
-3. Tastatur in den **Bootloader-Modus** versetzen – je nach Hardware-Revision gibt es zwei Methoden:
+3. Tastatur in den **Bootloader-Modus** versetzen – hierfür gibt es verschiedene Methoden:
 
-   **Methode A – Tastatur bereits angesteckt:**
+   **Methode A – Tastatur noch nicht angesteckt (Space + B):**
+   - **Space + B** (Leertaste und B) gleichzeitig gedrückt halten
+   - Tastatur währenddessen per USB mit dem Rechner verbinden
+   - Tasten erst loslassen, wenn QMK Toolbox die Verbindung meldet
+
+   **Methode B – Tastatur bereits angesteckt:**
    - **FN + ESC** drücken
    - Alternativ: Reset-Taster auf der Rückseite der Tastatur drücken
 
-   **Methode B – Tastatur noch nicht angesteckt (Bootmagic):**
+   **Methode C – Tastatur noch nicht angesteckt (Bootmagic):**
    - **ESC** gedrückt halten (die ESC-Taste ist als Bootmagic-Key definiert)
    - Tastatur dabei per USB anstecken
    - Taste erst loslassen, wenn QMK Toolbox die Verbindung meldet
 
-   > ℹ️ Wenn **FN + ESC** keine Reaktion zeigt, ist Methode B die richtige Wahl.
+   > ℹ️ Sollte eine Methode keine Reaktion zeigen, einfach eine der anderen Methoden ausprobieren.
 
 4. QMK Toolbox zeigt im Log: `WB32 DFU device connected`
 5. **Flash** klicken – fertig!
